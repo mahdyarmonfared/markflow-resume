@@ -12,6 +12,18 @@
 
 ---
 
+## 💡 Why MarkFlow?
+
+| Feature | MarkFlow | Google Docs | Canva / Figma | LaTeX |
+|---|---|---|---|---|
+| **ATS-friendly PDF** | ✅ Vector text | ❌ Raster export | ❌ Image-based | ✅ |
+| **Version control** | ✅ Plain Markdown | ❌ | ❌ | ✅ |
+| **Live preview** | ✅ Instant | ✅ | ✅ | ❌ Compile |
+| **Zero dependencies** | ✅ Node.js only | ❌ Cloud | ❌ Cloud | ❌ TeX distro |
+| **Free & open-source** | ✅ MIT | ⚠️ Freemium | ⚠️ Freemium | ✅ |
+
+---
+
 ## 🎯 The Problem
 
 Formatting an engineering resume or technical specification in Word, Google Docs, or bloated graphical design suites is frustrating:
