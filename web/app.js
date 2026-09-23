@@ -1,6 +1,6 @@
 /**
  * MarkFlow Frontend Application
- * Live dual-pane reactive editor with synchronized preview and vector A4 PDF export.
+ * Live dual-pane reactive editor with synchronized preview, design presets, and vector A4 PDF export.
  */
 
 // DOM Elements
@@ -9,6 +9,8 @@ const previewContent = document.getElementById('previewContent');
 const previewViewport = document.getElementById('previewViewport');
 const previewSheet = document.getElementById('previewSheet');
 const templateSelect = document.getElementById('templateSelect');
+const docThemeSelect = document.getElementById('docThemeSelect');
+const docFontSelect = document.getElementById('docFontSelect');
 const zoomSelect = document.getElementById('zoomSelect');
 const btnThemeToggle = document.getElementById('btnThemeToggle');
 const iconSun = document.getElementById('iconSun');
@@ -23,6 +25,13 @@ const btnExportHtml = document.getElementById('btnExportHtml');
 const fileInput = document.getElementById('fileInput');
 const btnClear = document.getElementById('btnClear');
 const btnScrollSync = document.getElementById('btnScrollSync');
+const btnOpenGallery = document.getElementById('btnOpenGallery');
+const templateGalleryModal = document.getElementById('templateGalleryModal');
+const btnCloseGalleryModal = document.getElementById('btnCloseGalleryModal');
+const galleryGrid = document.getElementById('galleryGrid');
+const btnShortcutsHelp = document.getElementById('btnShortcutsHelp');
+const shortcutsModal = document.getElementById('shortcutsModal');
+const btnCloseShortcutsModal = document.getElementById('btnCloseShortcutsModal');
 
 // Stats Elements
 const statWords = document.getElementById('statWords');
@@ -32,6 +41,7 @@ const statPages = document.getElementById('statPages');
 const autosaveIndicator = document.getElementById('autosaveIndicator');
 
 // State
+let allTemplates = [];
 let isScrollSync = true;
 let isScrollingFromEditor = false;
 let isScrollingFromPreview = false;
@@ -41,17 +51,20 @@ let saveTimer = null;
 // Initialize
 async function init() {
   setupTheme();
+  setupDocStyling();
   setupViewModes();
   setupToolbar();
   setupZoom();
   setupFileOps();
   setupScrollSync();
+  setupKeyboardShortcuts();
+  await loadTemplatesList();
   await loadInitialContent();
 
   editor.addEventListener('input', onEditorInput);
 }
 
-// 1. Theme Management
+// 1. Dark/Light Theme Management
 function setupTheme() {
   const savedTheme = localStorage.getItem('markflow_theme') || 'dark';
   applyTheme(savedTheme);
@@ -78,7 +91,39 @@ function applyTheme(theme) {
   }
 }
 
-// 2. View Modes (Split / Edit / Preview)
+// 2. Document Aesthetic & Typography Presets
+function setupDocStyling() {
+  const savedDocStyle = localStorage.getItem('markflow_doc_style') || 'modern';
+  const savedDocFont = localStorage.getItem('markflow_doc_font') || 'sans';
+
+  docThemeSelect.value = savedDocStyle;
+  docFontSelect.value = savedDocFont;
+  applyDocStyle(savedDocStyle, savedDocFont);
+
+  docThemeSelect.addEventListener('change', (e) => {
+    const style = e.target.value;
+    localStorage.setItem('markflow_doc_style', style);
+    applyDocStyle(style, docFontSelect.value);
+    showToast(`Applied ${e.target.options[e.target.selectedIndex].text} preset`, 'success');
+  });
+
+  docFontSelect.addEventListener('change', (e) => {
+    const font = e.target.value;
+    localStorage.setItem('markflow_doc_font', font);
+    applyDocStyle(docThemeSelect.value, font);
+  });
+}
+
+function applyDocStyle(style, font) {
+  previewSheet.classList.remove(
+    'doc-style-modern', 'doc-style-executive', 'doc-style-minimal', 'doc-style-emerald', 'doc-style-indigo',
+    'font-sans', 'font-serif', 'font-mono'
+  );
+  previewSheet.classList.add(`doc-style-${style}`);
+  previewSheet.classList.add(`font-${font}`);
+}
+
+// 3. View Modes (Split / Edit / Preview)
 function setupViewModes() {
   const setMode = (mode) => {
     workspace.classList.remove('mode-split', 'mode-edit', 'mode-preview');
@@ -103,15 +148,62 @@ function setupViewModes() {
   btnViewPreview.addEventListener('click', () => setMode('preview'));
 }
 
-// 3. Zoom Control
+// 4. Zoom Control
 function setupZoom() {
   zoomSelect.addEventListener('change', (e) => {
     const scale = e.target.value;
-    previewSheet.className = `a4-sheet zoom-${Math.round(scale * 100)}`;
+    previewSheet.classList.remove('zoom-75', 'zoom-85', 'zoom-100', 'zoom-115');
+    previewSheet.classList.add(`zoom-${Math.round(scale * 100)}`);
   });
 }
 
-// 4. Initial Content & Templates
+// 5. Template Gallery & Initial Content
+async function loadTemplatesList() {
+  try {
+    const res = await fetch('/api/templates');
+    if (res.ok) {
+      const data = await res.json();
+      allTemplates = data.templates || [];
+      renderGalleryCards('all');
+    }
+  } catch (err) {
+    console.error('Failed to load templates list:', err);
+  }
+}
+
+function renderGalleryCards(category) {
+  galleryGrid.innerHTML = '';
+  const filtered = allTemplates.filter(t => {
+    if (category === 'all') return true;
+    return t.category.toLowerCase().includes(category.toLowerCase());
+  });
+
+  filtered.forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'gallery-card';
+    card.innerHTML = `
+      <div>
+        <span class="card-cat-badge">${t.category}</span>
+        <h4 class="card-title">${t.name}</h4>
+        <p class="card-desc">${t.description}</p>
+      </div>
+      <div>
+        <button class="action-btn btn-primary btn-load-template" style="width: 100%; justify-content: center;" data-id="${t.id}">Use This Template</button>
+      </div>
+    `;
+
+    card.querySelector('.btn-load-template').addEventListener('click', async () => {
+      templateGalleryModal.close();
+      if (editor.value.trim() && !confirm('Replace current editor text with the selected template?')) {
+        return;
+      }
+      await loadTemplate(t.id);
+    });
+
+    galleryGrid.appendChild(card);
+  });
+}
+
 async function loadInitialContent() {
   const saved = localStorage.getItem('markflow_content');
   if (saved && saved.trim()) {
@@ -121,6 +213,7 @@ async function loadInitialContent() {
     await loadTemplate('resume');
   }
 
+  // Quick dropdown template selector
   templateSelect.addEventListener('change', async (e) => {
     const val = e.target.value;
     if (!val) return;
@@ -130,6 +223,32 @@ async function loadInitialContent() {
     }
     await loadTemplate(val);
     templateSelect.value = '';
+  });
+
+  // Open Template Gallery Modal
+  btnOpenGallery.addEventListener('click', () => {
+    templateGalleryModal.showModal();
+  });
+
+  btnCloseGalleryModal.addEventListener('click', () => {
+    templateGalleryModal.close();
+  });
+
+  // Filter chips in gallery
+  document.querySelectorAll('.gallery-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.gallery-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      renderGalleryCards(chip.dataset.cat);
+    });
+  });
+
+  // Shortcuts modal
+  btnShortcutsHelp.addEventListener('click', () => {
+    shortcutsModal.showModal();
+  });
+  btnCloseShortcutsModal.addEventListener('click', () => {
+    shortcutsModal.close();
   });
 }
 
@@ -149,7 +268,7 @@ async function loadTemplate(id) {
   }
 }
 
-// 5. Editor Input & Debounced Render
+// 6. Editor Input & Debounced Render
 function onEditorInput() {
   autosaveIndicator.textContent = 'Editing…';
   autosaveIndicator.style.color = 'var(--text-muted)';
@@ -157,17 +276,17 @@ function onEditorInput() {
   clearTimeout(renderTimer);
   renderTimer = setTimeout(() => {
     renderContent(editor.value);
-  }, 120);
+  }, 100);
 
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
     localStorage.setItem('markflow_content', editor.value);
     autosaveIndicator.textContent = 'Saved';
     autosaveIndicator.style.color = 'var(--success)';
-  }, 600);
+  }, 500);
 }
 
-// 6. Server-Driven Content Render & Stats
+// 7. Server-Driven Content Render & Stats
 async function renderContent(markdown) {
   try {
     const res = await fetch('/api/render', {
@@ -194,7 +313,7 @@ function updateStats(stats) {
   statPages.textContent = `${stats.pagesEst} ${stats.pagesEst === 1 ? 'Page' : 'Pages'} (A4)`;
 }
 
-// 7. Toolbar Formatting Helpers
+// 8. Toolbar Formatting Helpers
 function setupToolbar() {
   document.querySelectorAll('.tool-btn[data-action]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -223,43 +342,33 @@ function insertFormatting(action) {
   switch (action) {
     case 'bold':
       replacement = `**${sel || 'Bold Text'}**`;
-      cursorOffset = sel ? replacement.length : 2;
       break;
     case 'italic':
       replacement = `*${sel || 'Italic Text'}*`;
-      cursorOffset = sel ? replacement.length : 1;
       break;
     case 'h1':
       replacement = `\n# ${sel || 'Heading 1'}\n`;
-      cursorOffset = replacement.length;
       break;
     case 'h2':
       replacement = `\n## ${sel || 'Section Title'}\n`;
-      cursorOffset = replacement.length;
       break;
     case 'h3':
       replacement = `\n### ${sel || 'Subheading'}\n`;
-      cursorOffset = replacement.length;
       break;
     case 'link':
       replacement = `[${sel || 'Link Title'}](https://example.com)`;
-      cursorOffset = replacement.length;
       break;
     case 'code':
       replacement = `\`${sel || 'code'}\``;
-      cursorOffset = sel ? replacement.length : 1;
       break;
     case 'table':
       replacement = `\n| Column 1 | Column 2 | Column 3 |\n| :--- | :---: | ---: |\n| Item A | Value 1 | Detail 1 |\n| Item B | Value 2 | Detail 2 |\n`;
-      cursorOffset = replacement.length;
       break;
     case 'skill':
       replacement = `[skill: ${sel || 'TypeScript'}]`;
-      cursorOffset = replacement.length;
       break;
     case 'pagebreak':
       replacement = `\n\n---pagebreak---\n\n`;
-      cursorOffset = replacement.length;
       break;
     default:
       return;
@@ -270,9 +379,34 @@ function insertFormatting(action) {
   onEditorInput();
 }
 
-// 8. File Operations & Exports
+// 9. Keyboard Shortcuts
+function setupKeyboardShortcuts() {
+  window.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+      e.preventDefault();
+      window.print();
+    } else if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+      e.preventDefault();
+      btnDownloadMd.click();
+    } else if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+      e.preventDefault();
+      insertFormatting('bold');
+    } else if ((e.ctrlKey || e.metaKey) && e.key === 'i') {
+      e.preventDefault();
+      insertFormatting('italic');
+    } else if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      insertFormatting('link');
+    } else if (e.ctrlKey && e.key === 'Enter') {
+      e.preventDefault();
+      insertFormatting('pagebreak');
+      showToast('Inserted A4 Page Break', 'info');
+    }
+  });
+}
+
+// 10. File Operations & Exports
 function setupFileOps() {
-  // Import markdown file
   fileInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -286,7 +420,6 @@ function setupFileOps() {
     reader.readAsText(file);
   });
 
-  // Download .md
   btnDownloadMd.addEventListener('click', () => {
     const blob = new Blob([editor.value], { type: 'text/markdown;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -298,13 +431,13 @@ function setupFileOps() {
     showToast('Downloaded markflow-document.md', 'success');
   });
 
-  // Export standalone printable HTML
   btnExportHtml.addEventListener('click', async () => {
+    const currentTheme = docThemeSelect.value || 'modern';
     try {
       const res = await fetch('/api/export', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ markdown: editor.value, title: 'MarkFlow Resume' })
+        body: JSON.stringify({ markdown: editor.value, title: 'MarkFlow Resume', theme: currentTheme })
       });
       if (res.ok) {
         const data = await res.json();
@@ -322,13 +455,15 @@ function setupFileOps() {
     }
   });
 
-  // Vector A4 PDF Print Dialog
   btnPrintPdf.addEventListener('click', () => {
-    window.print();
+    showToast('Preparing vector A4 PDF… (Check "Background graphics" in print dialog)', 'info');
+    setTimeout(() => {
+      window.print();
+    }, 200);
   });
 }
 
-// 9. Synchronized Scrolling
+// 11. Synchronized Scrolling
 function setupScrollSync() {
   btnScrollSync.addEventListener('click', () => {
     isScrollSync = !isScrollSync;
@@ -372,7 +507,7 @@ function showToast(msg, type = 'info') {
     toast.style.opacity = '0';
     toast.style.transition = 'opacity 0.3s ease';
     setTimeout(() => toast.remove(), 300);
-  }, 2500);
+  }, 2600);
 }
 
 document.addEventListener('DOMContentLoaded', init);

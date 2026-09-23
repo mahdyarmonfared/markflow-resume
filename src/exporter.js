@@ -1,19 +1,26 @@
 /**
  * MarkFlow Standalone HTML & Printable Document Exporter
- * Wraps parsed markdown into a self-contained document with embedded print rules and ATS-optimized styling.
+ * Wraps parsed markdown into a self-contained document with embedded print rules, ATS styling, and design presets.
  */
 
 import { parseMarkdown, parseFrontmatter } from './parser.js';
 
 /**
  * Returns embedded CSS styles for both screen view and vector-clean A4 printing.
+ * @param {object} [options]
+ * @param {string} [options.theme='modern'] - 'modern' | 'executive' | 'minimal' | 'emerald' | 'indigo'
  * @returns {string}
  */
-export function getEmbeddedStyles() {
+export function getEmbeddedStyles(options = {}) {
+  const theme = options.theme || 'modern';
+
   return `
     :root {
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-serif: "Merriweather", Georgia, Cambria, "Times New Roman", Times, serif;
       --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      
+      /* Base Modern Theme */
       --text-main: #0f172a;
       --text-muted: #475569;
       --text-sub: #64748b;
@@ -22,6 +29,60 @@ export function getEmbeddedStyles() {
       --bg-callout: #f8fafc;
       --tag-bg: #f1f5f9;
       --tag-border: #cbd5e1;
+      --font-heading: var(--font-sans);
+      --font-body: var(--font-sans);
+    }
+
+    /* Executive Theme Preset */
+    body.doc-theme-executive {
+      --text-main: #1e293b;
+      --text-muted: #334155;
+      --text-sub: #475569;
+      --primary: #0f172a;
+      --border-color: #94a3b8;
+      --font-heading: var(--font-serif);
+      --font-body: var(--font-serif);
+      --tag-bg: #f8fafc;
+      --tag-border: #94a3b8;
+    }
+
+    /* Minimalist Monochrome Preset */
+    body.doc-theme-minimal {
+      --text-main: #000000;
+      --text-muted: #333333;
+      --text-sub: #555555;
+      --primary: #000000;
+      --border-color: #000000;
+      --tag-bg: #ffffff;
+      --tag-border: #000000;
+      --font-heading: var(--font-sans);
+      --font-body: var(--font-sans);
+    }
+
+    /* Nordic Emerald Preset */
+    body.doc-theme-emerald {
+      --text-main: #064e3b;
+      --text-muted: #047857;
+      --text-sub: #059669;
+      --primary: #059669;
+      --border-color: #a7f3d0;
+      --tag-bg: #ecfdf5;
+      --tag-border: #6ee7b7;
+      --font-heading: var(--font-sans);
+      --font-body: var(--font-sans);
+    }
+
+    /* Creative Indigo Preset */
+    body.doc-theme-indigo {
+      --text-main: #1e1b4b;
+      --text-muted: #3730a3;
+      --text-sub: #4f46e5;
+      --primary: #4f46e5;
+      --border-color: #c7d2fe;
+      --tag-bg: #eef2ff;
+      --tag-border: #a5b4fc;
+      --font-heading: var(--font-sans);
+      --font-body: var(--font-sans);
     }
 
     * {
@@ -31,7 +92,7 @@ export function getEmbeddedStyles() {
     }
 
     body {
-      font-family: var(--font-sans);
+      font-family: var(--font-body);
       color: var(--text-main);
       background-color: #ffffff;
       line-height: 1.5;
@@ -50,24 +111,25 @@ export function getEmbeddedStyles() {
 
     /* Headings */
     h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-heading);
       color: var(--text-main);
       font-weight: 700;
       line-height: 1.25;
     }
 
     h1.heading-lvl-1 {
-      font-size: 20pt;
+      font-size: 21pt;
       letter-spacing: -0.02em;
       margin-bottom: 2pt;
     }
 
     h2.heading-lvl-2 {
-      font-size: 13pt;
+      font-size: 12.5pt;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       border-bottom: 1.5pt solid var(--border-color);
       padding-bottom: 3pt;
-      margin-top: 12pt;
+      margin-top: 13pt;
       margin-bottom: 6pt;
     }
 
@@ -75,9 +137,6 @@ export function getEmbeddedStyles() {
       font-size: 11pt;
       margin-top: 8pt;
       margin-bottom: 2pt;
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
     }
 
     h4.heading-lvl-4 {
@@ -88,7 +147,7 @@ export function getEmbeddedStyles() {
     }
 
     p.doc-p {
-      margin-bottom: 4pt;
+      margin-bottom: 4.5pt;
       color: var(--text-main);
     }
 
@@ -140,6 +199,12 @@ export function getEmbeddedStyles() {
       color: #6b21a8;
     }
 
+    body.doc-theme-minimal .inline-badge {
+      background: #ffffff !important;
+      border-color: #000000 !important;
+      color: #000000 !important;
+    }
+
     /* Lists */
     ul.doc-list, ol.doc-ordered-list {
       margin-left: 14pt;
@@ -147,7 +212,7 @@ export function getEmbeddedStyles() {
     }
 
     ul.doc-list li, ol.doc-ordered-list li {
-      margin-bottom: 2pt;
+      margin-bottom: 2.5pt;
       padding-left: 2pt;
     }
 
@@ -319,6 +384,7 @@ export function generateStandaloneHtml(rawMarkdown, options = {}) {
   const parsedContent = parseMarkdown(rawMarkdown, options);
   const title = options.title || metadata.title || 'MarkFlow Document';
   const author = metadata.author || '';
+  const theme = options.theme || 'modern';
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -328,10 +394,10 @@ export function generateStandaloneHtml(rawMarkdown, options = {}) {
   <title>${escapeTitle(title)}</title>
   ${author ? `<meta name="author" content="${escapeTitle(author)}">` : ''}
   <style>
-${getEmbeddedStyles()}
+${getEmbeddedStyles({ theme })}
   </style>
 </head>
-<body>
+<body class="doc-theme-${theme}">
   <main class="a4-page">
 ${parsedContent}
   </main>

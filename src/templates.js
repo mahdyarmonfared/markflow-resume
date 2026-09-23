@@ -1,14 +1,14 @@
 /**
  * MarkFlow Built-in Professional Templates
- * Curated for ATS-friendly resumes, technical RFC specifications, and engineering decision records.
+ * Curated for ATS-friendly engineering resumes, technical RFC specifications, incident post-mortems, and decision logs.
  */
 
 export const TEMPLATES = {
   resume: {
     id: 'resume',
-    name: 'Senior Software Engineer Resume (ATS-Friendly)',
-    category: 'Career',
-    description: 'Battle-tested, single-page or two-page ATS-optimized software engineer resume with metric-focused bullet points.',
+    name: 'Senior Fullstack Engineer (ATS-Friendly)',
+    category: 'Software Engineering',
+    description: 'Battle-tested, metric-focused software engineer resume with clean ATS hierarchy, skills taxonomy, and impact bullet points.',
     content: `---
 title: "Alex Morgan - Senior Fullstack Engineer"
 author: "Alex Morgan"
@@ -22,7 +22,7 @@ linkedin: "linkedin.com/in/alexmorgan"
 # Alex Morgan
 ### Senior Fullstack & Distributed Systems Engineer
 
-[contact: alex.morgan@devmail.com | +1 (555) 234-5678 | San Francisco, CA | github.com/alexmorgan]
+[contact: alex.morgan@devmail.com | +1 (555) 234-5678 | San Francisco, CA | github.com/alexmorgan | linkedin.com/in/alexmorgan]
 
 ---
 
@@ -75,11 +75,236 @@ Senior Software Engineer with 7+ years of expertise in building high-throughput 
 `
   },
 
+  devops: {
+    id: 'devops',
+    name: 'DevOps & Site Reliability Engineer (SRE)',
+    category: 'Cloud & Infrastructure',
+    description: 'Infrastructure-as-Code, Kubernetes orchestration, multi-region cloud resilience, and automated CI/CD pipeline resume.',
+    content: `---
+title: "Jordan Reed - Staff Site Reliability Engineer"
+author: "Jordan Reed"
+role: "Staff Site Reliability Engineer"
+location: "Seattle, WA (Hybrid)"
+email: "jordan.sre@infraops.io"
+github: "github.com/jordanreed-ops"
+---
+
+# Jordan Reed
+### Staff Site Reliability Engineer & Cloud Architect
+
+[contact: jordan.sre@infraops.io | +1 (206) 555-0199 | Seattle, WA | github.com/jordanreed-ops]
+
+---
+
+## Summary of Qualifications
+Results-driven Infrastructure & SRE Specialist with 8+ years designing zero-downtime Kubernetes platforms, managing multi-cloud Terraform pipelines (AWS & GCP), and reducing Mean Time to Resolution (MTTR) by 65%. Champion of GitOps, Chaos Engineering, and cost-efficient cloud economics.
+
+---
+
+## Core Skills & Tooling
+- **Cloud & Orchestration:** [skill: Kubernetes (EKS/GKE)] [skill: Docker] [skill: Terraform] [skill: Helm] [skill: Istio Service Mesh]
+- **CI/CD & GitOps:** [skill: GitHub Actions] [skill: ArgoCD] [skill: GitLab CI] [skill: Vault]
+- **Observability:** [skill: Prometheus] [skill: Grafana] [skill: OpenTelemetry] [skill: Datadog] [skill: ELK Stack]
+- **Scripting & Systems:** [skill: Go] [skill: Python] [skill: Bash] [skill: Linux Kernel Tuning] [skill: TCP/IP Networking]
+
+---
+
+## Career Experience
+
+### **Staff SRE / Tech Lead** | Apex Cloud Systems
+*January 2022 – Present | Seattle, WA*
+- Architected enterprise Kubernetes platform hosting 450+ microservices across 3 global AWS regions with **99.995% SLA**.
+- Reduced multi-account AWS cloud expenditure by **$420,000 annually** via automated Spot Instance scaling and Karpenter.
+- Spearheaded company-wide Incident Command training, reducing SEV-1 MTTR from 48 minutes down to 14 minutes.
+- Automated end-to-end disaster recovery drills, verifying complete regional recovery in under 8 minutes.
+
+### **Senior DevOps Engineer** | DataMesh Technologies
+*June 2018 – December 2021 | Portland, OR*
+- Converted manual VM-based deployments to unified Infrastructure-as-Code using Terraform and ArgoCD GitOps.
+- Built automated canary deployment pipeline using Istio service mesh, catching 35+ production-critical regressions pre-release.
+- Hardened container security by implementing automated Trivy image scanning and Cosign cryptographic artifact signing in CI.
+
+---
+
+## Certifications & Education
+- **Certified Kubernetes Administrator (CKA)** — Cloud Native Computing Foundation
+- **HashiCorp Certified: Terraform Associate (003)**
+- **AWS Certified DevOps Engineer – Professional**
+- **B.S. in Information Systems** — University of Washington
+`
+  },
+
+  designer: {
+    id: 'designer',
+    name: 'Lead Product Designer & Design Systems',
+    category: 'Design & Product',
+    description: 'Portfolio-focused CV highlighting design systems, UX research, conversion metrics, and cross-functional leadership.',
+    content: `---
+title: "Maya Lin - Lead Product Designer"
+author: "Maya Lin"
+role: "Lead Product Designer"
+location: "New York, NY"
+email: "maya.lin@designstudio.co"
+portfolio: "mayalin.design"
+---
+
+# Maya Lin
+### Lead Product Designer & Design Systems Architect
+
+[contact: maya.lin@designstudio.co | mayalin.design | New York, NY | linkedin.com/in/mayalindesign]
+
+---
+
+## Design Philosophy & Profile
+Lead Product Designer with 6+ years specializing in complex enterprise SaaS, multi-platform design systems (Figma Tokens, Tailwind, Web Components), and evidence-based UX research. Passionate about bridging the gap between product strategy, accessible design (WCAG AAA), and engineering handoff.
+
+---
+
+## Skills & Methodologies
+- **Design Systems:** [skill: Figma Variables] [skill: Design Tokens] [skill: Component Libraries] [skill: Storybook]
+- **UX & Research:** [skill: Usability Testing] [skill: User Journey Mapping] [skill: Rapid Prototyping] [skill: Information Architecture]
+- **Frontend Familiarity:** [skill: HTML5 / Modern CSS] [skill: Tailwind CSS] [skill: React Basics] [skill: Accessibility (a11y)]
+- **Product Strategy:** [tag: Conversion Rate Optimization (CRO)] [tag: Jobs-to-be-Done (JTBD)] [tag: A/B Experimentation]
+
+---
+
+## Notable Experience
+
+### **Lead Product Designer** | Stripe Payments Partner
+*March 2022 – Present | New York, NY*
+- Built unified multi-brand design system from scratch across Web, iOS, and Android; increased engineering velocity by **38%**.
+- Redesigned checkout onboarding funnel, lifting completion rate by **21.4% ($2.8M incremental ARR)**.
+- Mentored a pod of 4 junior and mid-level product designers; instituted bi-weekly design critique and heuristic evaluation standards.
+
+### **Senior UI/UX Designer** | Canvas Analytics
+*September 2019 – February 2022 | Boston, MA*
+- Led discovery and interaction design for complex real-time analytics dashboards used by 120k daily active enterprise analysts.
+- Conducted 80+ qualitative user interviews and synthesized insights into high-impact roadmap priorities.
+- Spearheaded company-wide accessibility initiative, achieving full WCAG 2.1 AA compliance across all public web interfaces.
+
+---
+
+## Education & Honors
+- **B.F.A. in Graphic & Interactive Design** — Rhode Island School of Design (RISD)
+- **Fast Company Innovation by Design Honoree (2024)**
+`
+  },
+
+  engineering_manager: {
+    id: 'engineering_manager',
+    name: 'Engineering Manager & Director of Engineering',
+    category: 'Leadership & Management',
+    description: 'Executive leadership CV focusing on team building, engineering leverage, OKR delivery, and organizational scaling.',
+    content: `---
+title: "David Vance - Director of Engineering"
+author: "David Vance"
+role: "Director of Engineering"
+location: "San Francisco, CA"
+email: "david.vance@techlead.org"
+linkedin: "linkedin.com/in/davidvance"
+---
+
+# David Vance
+### Director of Engineering & Technical Organizational Leader
+
+[contact: david.vance@techlead.org | +1 (415) 555-8321 | San Francisco, CA | linkedin.com/in/davidvance]
+
+---
+
+## Executive Profile
+Engineering Leader with 12+ years of software engineering background and 6+ years managing high-performance teams of 25–60 engineers across Core Infrastructure, Product, and Security. Track record scaling engineering organizations through Hypergrowth (Series B to IPO), instilling high-trust psychological safety, and driving predictable, high-cadence product delivery.
+
+---
+
+## Leadership Competencies
+- **People & Culture:** [skill: High Output Management] [skill: Career Ladders & Mentorship] [skill: Hiring & Retention] [skill: Remote Leadership]
+- **Operational Excellence:** [skill: OKRs & Strategic Planning] [skill: Agile / Scrum Scaling] [skill: SOC2 & Compliance] [skill: Budgeting ($5M+)]
+- **Technical Governance:** [skill: System Architecture Reviews] [skill: Technical Debt Triage] [skill: Developer Ergonomics]
+
+---
+
+## Leadership History
+
+### **Director of Engineering** | FinPeak Solutions
+*June 2021 – Present | San Francisco, CA*
+- Managed 4 engineering pods (38 engineers, 4 Engineering Managers) building real-time payment settlement rails.
+- Improved annual team retention to **94%** through structured 1:1 coaching, transparent leveling criteria, and psychological safety.
+- Partnered with C-suite stakeholders to deliver multi-currency settlement expansion on time, unlocking **$18M in net new ARR**.
+- Reduced deployment cycle time from 14 days to multiple releases per day through automated trunk-based CI/CD tooling.
+
+### **Software Engineering Manager** | Stripe-backed Startup
+*April 2018 – May 2021 | San Francisco, CA*
+- Scaled backend platform team from 5 to 22 engineers across 3 timezones while maintaining high recruitment bar.
+- Restructured on-call rotation and instituted blameless post-mortems, reducing alert fatigue and SEV-1 recurrence by 70%.
+
+---
+
+## Education & Executive Training
+- **B.S. in Computer Science & Applied Mathematics** — Stanford University
+- **Stanford Executive Program in Leadership & Strategy**
+`
+  },
+
+  data_science: {
+    id: 'data_science',
+    name: 'Senior AI & Machine Learning Engineer',
+    category: 'AI & Data Science',
+    description: 'LLM fine-tuning, RAG architecture, vector search, PyTorch model deployment, and high-throughput inference CV.',
+    content: `---
+title: "Elena Rostova - Staff Machine Learning Engineer"
+author: "Elena Rostova"
+role: "Staff Machine Learning Engineer"
+location: "Austin, TX (Remote)"
+email: "elena.rostova@ailab.dev"
+github: "github.com/erostova"
+---
+
+# Elena Rostova
+### Staff Machine Learning & Generative AI Systems Engineer
+
+[contact: elena.rostova@ailab.dev | Austin, TX | github.com/erostova | scholar.google.com/erostova]
+
+---
+
+## Professional Focus
+Machine Learning Specialist with 7+ years of experience taking deep learning models from exploratory notebooks into high-availability production APIs. Deep expertise in Generative AI architectures, Retrieval-Augmented Generation (RAG), vector similarity search, low-latency LLM inference (vLLM, TensorRT-LLM), and distributed training.
+
+---
+
+## Technical Stack
+- **Frameworks & Libs:** [skill: PyTorch] [skill: HuggingFace] [skill: vLLM] [skill: LangChain / LlamaIndex] [skill: Triton Server]
+- **Search & Vectors:** [skill: Qdrant] [skill: Milvus] [skill: Pinecone] [skill: Hybrid Search (RRF)] [skill: BM25]
+- **Infrastructure:** [skill: CUDA / GPU Profiling] [skill: Ray.io] [skill: Kubernetes] [skill: Docker] [skill: AWS Bedrock]
+- **Languages:** [skill: Python (FastAPI)] [skill: C++] [skill: SQL] [skill: Rust (Triton kernels)]
+
+---
+
+## Professional Highlights
+
+### **Staff AI Engineer** | Cognition Systems
+*August 2022 – Present | Austin, TX*
+- Designed and productionized enterprise RAG pipeline handling **2.5M queries/day** with sub-350ms TTFT (Time-To-First-Token).
+- Optimized open-source LLM inference latency by **3.8x** using vLLM PagedAttention and TensorRT-LLM FP8 quantization.
+- Implemented automated evaluation harness (LLM-as-a-Judge) benchmarking faithfulness, relevance, and hallucinations across 50k test cases.
+
+### **Senior Machine Learning Engineer** | NeuroScale
+*March 2019 – July 2022 | San Jose, CA*
+- Trained and fine-tuned proprietary domain-specific transformer models for biomedical entity extraction with 96.2% F1 score.
+- Architected multi-GPU distributed data-parallel training pipelines using PyTorch FSDP on AWS EC2 p4de instances.
+
+---
+
+## Selected Publications & Patents
+- **Rostova, E.**, & Mercer, T. (2024). "Sub-millisecond Vector Reranking via Hierarchical Quantization." *NeurIPS Workshop*.
+- US Patent 11,842,910: *Asynchronous Context Caching in Real-Time Conversational Agent Systems*.
+`
+  },
+
   rfc: {
     id: 'rfc',
-    name: 'Technical RFC / Architecture Specification',
-    category: 'Engineering',
-    description: 'Standard Architecture Decision Record and Request For Comments document for engineering teams.',
+    name: 'Technical RFC & Architecture Specification',
+    category: 'Engineering Specs',
+    description: 'Standard Architecture Decision Record (ADR) and Request For Comments document for engineering teams.',
     content: `---
 title: "RFC 042: Real-time Distributed Event Streaming Architecture"
 status: "Draft / In Review"
@@ -143,9 +368,66 @@ Our current polling-based architecture generates unnecessary database queries (*
 `
   },
 
+  postmortem: {
+    id: 'postmortem',
+    name: 'SEV-1 Incident Post-Mortem & RCA',
+    category: 'Engineering Specs',
+    description: 'Blameless incident post-mortem template with timeline, impact, 5 Whys root cause analysis, and preventative action items.',
+    content: `---
+title: "Incident Post-Mortem: Payment Webhook Disruption (SEV-1)"
+date: "2026-09-24"
+incident_lead: "Alex Morgan"
+duration: "42 minutes"
+status: "Resolved / Preventative Actions In Progress"
+---
+
+# SEV-1 Post-Mortem: Payment Webhook Disruption
+**Incident Date:** September 23, 2026 • **Total Downtime:** 42 Minutes • **Severity:** High (SEV-1)
+
+[contact: Incident Lead: Alex Morgan | SRE Lead: Jordan Reed | Billing Lead: Elena Rostova]
+
+---
+
+## 🚨 Incident Summary & Customer Impact
+Between 14:18 UTC and 15:00 UTC, an unindexed database query in the subscription renewal worker caused PostgreSQL connection pool exhaustion. Approximately 1,420 incoming customer checkout callbacks were delayed by up to 35 minutes. No data loss occurred, and all delayed webhooks were idempotently processed once pool connections recovered.
+
+---
+
+## ⏱️ Timeline of Events (UTC)
+
+| Time | Event |
+| :--- | :--- |
+| **14:18** | Automated Datadog alert fires: PostgreSQL connection saturation > 95%. |
+| **14:22** | On-call SRE acknowledges alert and opens incident war room. |
+| **14:28** | Traffic routed to read-only replica failover while investigating root query. |
+| **14:35** | Slow query identified: \`SELECT * FROM invoices WHERE status = 'pending' AND tenant_id = ?\` missing composite index. |
+| **14:42** | Emergency concurrent index applied to production cluster (\`CONCURRENTLY\`). |
+| **14:50** | Database active connections drop from 500 to normal baseline (42). |
+| **15:00** | Backlogged webhook queue drained; all payment transactions reconciled. SEV-1 stood down. |
+
+---
+
+## 🔍 Root Cause Analysis (5 Whys)
+1. **Why did the checkout webhooks time out?** The database connection pool was starved.
+2. **Why was the pool starved?** Long-running query scans locked table rows for >12 seconds.
+3. **Why did the query scan take 12 seconds?** The \`tenant_id + status\` composite index was dropped during previous schema refactoring.
+4. **Why was the index missing in production?** The migration verification script did not validate index existence on foreign keys.
+5. **Why was there no automated alert before exhaustion?** Query latency alerts were set to a 15-minute rolling average rather than P99 spike detection.
+
+---
+
+## 🛡️ Corrective Action Items
+
+- [x] Apply emergency index on \`invoices(tenant_id, status)\` (*Owner: Alex - Completed*)
+- [ ] Add automated migration lint rule in CI forbidding unindexed foreign keys (*Owner: Jordan - Due Sep 27*)
+- [ ] Implement client-side connection timeout (max 3s) for webhook listener pool (*Owner: Elena - Due Sep 28*)
+- [ ] Refactor Datadog alerts to trigger on P99 query latency > 500ms over 1 minute (*Owner: Jordan - Due Sep 29*)
+`
+  },
+
   meeting: {
     id: 'meeting',
-    name: 'Executive Engineering Meeting & Decision Log',
+    name: 'Sprint Planning & Decisions Log (ADR)',
     category: 'Productivity',
     description: 'Clean, actionable meeting notes template with agenda, attendee roster, and action item checklists.',
     content: `---
@@ -169,7 +451,7 @@ location: "Virtual / Google Meet"
 
 ---
 
-## 💡 Key Decisions Log
+## 💡 Key Decisions Log (ADR)
 
 | Decision ID | Topic | Decision Made | Rationale |
 | :--- | :--- | :--- | :--- |
@@ -193,8 +475,8 @@ location: "Virtual / Google Meet"
 
   academic: {
     id: 'academic',
-    name: 'Minimalist Academic & Research CV',
-    category: 'Academic',
+    name: 'Minimalist Academic & Scientific Research CV',
+    category: 'Academic & Research',
     description: 'Clean single-column academic CV template featuring research publications, teaching, and grants.',
     content: `---
 title: "Dr. Evelyn Vance - Curriculum Vitae"

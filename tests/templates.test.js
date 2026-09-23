@@ -6,10 +6,21 @@ import { parseMarkdown, parseFrontmatter } from '../src/parser.js';
 describe('MarkFlow Templates Tests', () => {
   test('all required starter templates exist', () => {
     const keys = Object.keys(TEMPLATES);
-    assert.ok(keys.includes('resume'), 'Missing resume template');
-    assert.ok(keys.includes('rfc'), 'Missing RFC template');
-    assert.ok(keys.includes('meeting'), 'Missing meeting template');
-    assert.ok(keys.includes('academic'), 'Missing academic template');
+    const required = [
+      'resume',
+      'devops',
+      'designer',
+      'engineering_manager',
+      'data_science',
+      'rfc',
+      'postmortem',
+      'meeting',
+      'academic'
+    ];
+    for (const key of required) {
+      assert.ok(keys.includes(key), `Missing template: ${key}`);
+    }
+    assert.equal(keys.length, 9, 'Expected 9 total built-in templates');
   });
 
   test('templates have valid metadata and render without errors', () => {
