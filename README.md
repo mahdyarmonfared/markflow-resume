@@ -7,6 +7,8 @@
 [![Tests Passing](https://img.shields.io/badge/tests-17%2F17%20passed-success.svg)](tests/)
 [![Port](https://img.shields.io/badge/local%20port-3006-indigo.svg)](http://localhost:3006)
 [![ATS Optimized](https://img.shields.io/badge/resume-ATS%20Optimized-emerald.svg)](#features)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/mahdyarmonfared/markflow-resume/pulls)
+[![Made with Node.js](https://img.shields.io/badge/Made%20with-Node.js-339933.svg?logo=node.js&logoColor=white)](https://nodejs.org)
 
 ---
 
@@ -125,6 +127,36 @@ npm test
 ℹ suites 4
 ℹ pass 17
 ℹ fail 0
+```
+
+---
+
+## ⌨️ Keyboard Shortcuts
+
+| Shortcut | Action |
+| --- | --- |
+| `Ctrl + S` | Save current document to localStorage |
+| `Ctrl + P` | Export to PDF via native print dialog |
+| `Ctrl + E` | Toggle between editor and preview focus |
+| `Ctrl + D` | Toggle dark / light theme |
+| `Ctrl + T` | Open template selector |
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!
+
+1. **Fork** the repository.
+2. **Create** your feature branch: `git checkout -b feat/amazing-feature`
+3. **Commit** your changes: `git commit -m "feat: add amazing feature"`
+4. **Push** to the branch: `git push origin feat/amazing-feature`
+5. **Open** a Pull Request.
+
+Please make sure all tests pass before submitting:
+
+```bash
+npm test
 ```
 
 ---
