@@ -1,0 +1,38 @@
+{
+  "name": "markflow-resume",
+  "version": "1.0.0",
+  "description": "Live dual-pane Markdown editor and vector-clean A4 PDF resume & technical documentation generator.",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "markflow-resume": "./bin/markflow-resume.js",
+    "markflow": "./bin/markflow-resume.js"
+  },
+  "scripts": {
+    "start": "node ./bin/markflow-resume.js ui",
+    "ui": "node ./bin/markflow-resume.js ui",
+    "test": "node --test tests/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mahdyarmonfared/markflow-resume.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mahdyarmonfared/markflow-resume/issues"
+  },
+  "homepage": "https://github.com/mahdyarmonfared/markflow-resume#readme",
+  "keywords": [
+    "markdown",
+    "resume",
+    "cv-generator",
+    "pdf-export",
+    "a4-print",
+    "live-preview",
+    "editor",
+    "ats-friendly",
+    "developer-tools",
+    "cli"
+  ],
+  "author": "Mahdyar Monfared (https://github.com/mahdyarmonfared)",
+  "license": "MIT"
+}

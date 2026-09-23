@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MarkFlow — Live Markdown Editor & A4 PDF Resume Generator</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/><line x1='16' y1='13' x2='8' y2='13'/><line x1='16' y1='17' x2='8' y2='17'/><polyline points='10 9 9 9 8 9'/></svg>">
+</head>
+<body class="theme-dark">
+  <!-- Top Navigation Bar -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="brand">
+        <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <line x1="10" y1="9" x2="8" y2="9"></line>
+        </svg>
+        <span class="brand-name">Mark<span class="brand-accent">Flow</span></span>
+        <span class="brand-tag">A4 PDF & CV</span>
+      </div>
+
+      <div class="template-selector-wrap">
+        <label for="templateSelect" class="sr-only">Choose Template</label>
+        <select id="templateSelect" class="select-input" title="Choose Starter Template">
+          <option value="" disabled selected>Load Template…</option>
+          <option value="resume">Senior Software Engineer Resume (ATS)</option>
+          <option value="rfc">Technical RFC & Architecture Spec</option>
+          <option value="meeting">Engineering Meeting & Decisions Log</option>
+          <option value="academic">Academic & Research CV</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="view-toggles" role="group" aria-label="Editor View Modes">
+        <button id="btnViewSplit" class="view-btn active" title="Split Screen Mode">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+          <span>Split</span>
+        </button>
+        <button id="btnViewEdit" class="view-btn" title="Editor Only">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          <span>Edit</span>
+        </button>
+        <button id="btnViewPreview" class="view-btn" title="A4 Preview Only">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span>Preview</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <!-- File Operations -->
+      <label class="action-btn btn-secondary file-upload-btn" title="Import Markdown File">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span>Import</span>
+        <input type="file" id="fileInput" accept=".md,.markdown,.txt" style="display: none;">
+      </label>
+
+      <button id="btnDownloadMd" class="action-btn btn-secondary" title="Download Markdown (.md)">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Save .md</span>
+      </button>
+
+      <button id="btnExportHtml" class="action-btn btn-secondary" title="Export Standalone Printable HTML">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        <span>Export HTML</span>
+      </button>
+
+      <button id="btnPrintPdf" class="action-btn btn-primary" title="Print to Vector A4 PDF (Ctrl+P)">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        <span>Print / Save PDF</span>
+      </button>
+
+      <!-- Theme Switcher -->
+      <button id="btnThemeToggle" class="icon-btn" title="Toggle Dark/Light Theme">
+        <svg id="iconSun" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg id="iconMoon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Workspace Container -->
+  <main class="workspace-container">
+    <!-- Left: Markdown Editor Pane -->
+    <section id="editorPane" class="pane editor-pane">
+      <div class="toolbar">
+        <div class="toolbar-group">
+          <button type="button" class="tool-btn" data-action="bold" title="Bold (**text**)"><strong>B</strong></button>
+          <button type="button" class="tool-btn" data-action="italic" title="Italic (*text*)"><em>I</em></button>
+          <span class="tool-sep"></span>
+          <button type="button" class="tool-btn" data-action="h1" title="Heading 1">H1</button>
+          <button type="button" class="tool-btn" data-action="h2" title="Heading 2">H2</button>
+          <button type="button" class="tool-btn" data-action="h3" title="Heading 3">H3</button>
+          <span class="tool-sep"></span>
+          <button type="button" class="tool-btn" data-action="link" title="Insert Link">🔗</button>
+          <button type="button" class="tool-btn" data-action="code" title="Inline Code">`code`</button>
+          <button type="button" class="tool-btn" data-action="table" title="Insert Table">⊞ Table</button>
+          <span class="tool-sep"></span>
+          <button type="button" class="tool-btn badge-tool-btn" data-action="skill" title="Insert [skill: Name]">🏷 Skill</button>
+          <button type="button" class="tool-btn pagebreak-tool-btn" data-action="pagebreak" title="Insert Page Break (A4 Split)">✂ PageBreak</button>
+        </div>
+        <div class="toolbar-group right">
+          <button id="btnClear" class="tool-btn text-danger" title="Clear Editor">Clear</button>
+        </div>
+      </div>
+
+      <div class="editor-wrapper">
+        <textarea id="markdownInput" class="editor-textarea" placeholder="Type or paste your Markdown here, or choose a template from the top menu…" spellcheck="false"></textarea>
+      </div>
+
+      <!-- Editor Status Bar -->
+      <footer class="editor-statusbar">
+        <div class="status-left">
+          <span id="statWords">0 words</span>
+          <span class="status-sep">•</span>
+          <span id="statChars">0 chars</span>
+          <span class="status-sep">•</span>
+          <span id="statReading">1 min read</span>
+        </div>
+        <div class="status-right">
+          <span id="statPages" class="page-badge">1 Page (A4)</span>
+          <span id="autosaveIndicator" class="autosave-tag">Saved</span>
+        </div>
+      </footer>
+    </section>
+
+    <!-- Center Divider -->
+    <div id="splitDivider" class="split-divider" title="Drag to resize panels">
+      <div class="divider-handle"></div>
+    </div>
+
+    <!-- Right: Live A4 Preview Pane -->
+    <section id="previewPane" class="pane preview-pane">
+      <div class="preview-toolbar">
+        <div class="preview-info">
+          <span class="preview-badge">A4 Sheet Simulation (210 × 297 mm)</span>
+          <span class="ats-badge" title="ATS-Optimized font & vector printing">ATS Friendly</span>
+        </div>
+        <div class="preview-controls">
+          <label for="zoomSelect" class="zoom-label">Zoom:</label>
+          <select id="zoomSelect" class="zoom-select">
+            <option value="0.75">75%</option>
+            <option value="0.85">85%</option>
+            <option value="1" selected>100%</option>
+            <option value="1.15">115%</option>
+          </select>
+          <button id="btnScrollSync" class="toggle-icon-btn active" title="Toggle Synchronized Scrolling">
+            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
+            <span>Sync Scroll</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Printable A4 Paper Simulator -->
+      <div id="previewViewport" class="preview-viewport">
+        <div id="previewSheet" class="a4-sheet zoom-100">
+          <div id="previewContent" class="a4-page-content">
+            <!-- Dynamic Parsed HTML will be injected here -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Notification Toast Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
